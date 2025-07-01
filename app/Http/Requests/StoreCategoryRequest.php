@@ -11,7 +11,7 @@ class StoreCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|unique:categories,title|min:5'
+            //ဒီမှာ title က မရေးလည်းရတယ် ဘာလို့ ဆို left side က လည်း title ဆိုတဲ့ နာမည်နဲ့ပဲဖြစ်နေလို့
         ];
     }
 }
