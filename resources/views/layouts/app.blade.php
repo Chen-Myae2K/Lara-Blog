@@ -114,6 +114,17 @@
                                 </a>
                             </div>
 
+                            <p class="text-black text-small">Manage Users</p>
+                            <div class="list-group mb-3">
+                                <a class="list-group-item list-group-item-action" href="{{ route('user.index') }}">
+                                    User List
+                                </a>
+
+                                <a class="list-group-item list-group-item-action" href="{{ route('user.create') }}">
+                                    Create User
+                                </a>
+                            </div>
+
                         </div>
                         <div class="col-lg-9">
                             @yield('content')
