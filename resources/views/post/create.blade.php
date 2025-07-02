@@ -54,7 +54,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="">
                         <label for="featured_image" class="form-label">Featured Image</label>
-                        <input type="file" value="{{ old('featured_image') }}" id="featured_image"
+                        <input type="file" id="featured_image"
                             class="form-control @error('featured_image') is-invalid @enderror" name='featured_image'>
                         @error('featured_image')
                             <div class="invalid-feedback">

@@ -11,7 +11,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|unique:posts,title,' . $this->route('post')->id,
+            'category' => 'required|exists:categories,id',
+            'description' => 'required|min:10',
+            'featured_image' => 'nullable|mimes:jpeg,png,jpg|file|max:512',
         ];
     }
 }
