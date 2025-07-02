@@ -10,16 +10,30 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
+                        <h4>{{ $post->title }}</h4>
+                        <hr>
+                        <div class="mb-3">
+                            @isset($post->featured_image)
+                                <img src="{{ asset('storage/' . $post->featured_image) }}" class="img-fluid"
+                                    alt="Featured Image">
+                            @endisset
+                        </div>
+                        <div class="mb-3">
+                            <strong>Category:</strong> {{ \App\Models\Category::find($post->category_id)->title }}
+                        </div>
+                        <div class="mb-3">
+                            <strong>Author:</strong> {{ \App\Models\User::find($post->user_id)->name }}
+                        </div>
+                        <div class="mb-3">
+                            <strong>Description:</strong>
+                            <p>{{ $post->description }}</p>
+                        </div>
 
-                        {{ __('You are logged in!') }}
+                        <div class="mb-3">
+                            <a href="{{ route('post.create') }}" class="btn btn-outline-primary">Create New Post</a>
+                            <a href="{{ route('post.index') }}" class="btn btn-primary">Back to Post List</a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -11,6 +11,23 @@
         <div class="card-body">
             <h4>Post List</h4>
             <hr>
+            <div class="d-flex justify-content-between items-center mb-3">
+
+                <div class="d-flex gap-3 items-center">
+                    @if (request('keyword'))
+                        <p>Search by : {{ request('keyword') }}</p>
+                        <a href="{{ route('post.index') }}">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    @endif
+                </div>
+                <div>
+                    <form action="{{ route('post.index') }}" method="get" class="d-flex">
+                        <input type="text" name="keyword" class="form-control me-2 " value="{{ request('keyword') }}">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
+            </div>
             <table class="table ">
                 <thead>
                     <tr>
@@ -30,13 +47,17 @@
                                 {{ $post->title }}
                             </td>
                             <td>{{ \App\Models\Category::find($post->category_id)->title }}</td>
-                            <td>{{ \App\Models\User::find($post->user_id)->name}}</td>
+                            <td>{{ \App\Models\User::find($post->user_id)->name }}</td>
                             <td class=" ">
                                 <a href="{{ route('post.edit', $post->id) }}" class="btn btn-sm btn-outline-dark">
                                     <i class="bi bi-pencil"></i>
                                 </a>
+                                <a href="{{ route('post.show', $post->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-info-circle"></i>
+                                </a>
 
-                                <form action="{{ route('post.destroy', $post->id) }}" class="d-inline block" method="post">
+                                <form action="{{ route('post.destroy', $post->id) }}" class="d-inline block"
+                                    method="post">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-sm btn-outline-danger"><i
@@ -53,6 +74,9 @@
                         </tr>
 
                     @empty
+                        <tr>
+                            <td colspan="6" class="text-center">There is no post for {{ request('keyword') }}</td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>

@@ -16,7 +16,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest('id')->paginate(10);
+
+        $posts = Post::when(request('keyword'), function ($query) {
+            $keyword = request('keyword');
+            $query->orWhere('title', 'LIKE', "%$keyword%")
+                ->orWhere('description', 'LIKE', "%$keyword%");
+        })->latest('id')->paginate(10)->withQueryString();
         return view('post.index', compact('posts'));
     }
 
@@ -55,7 +60,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('post.show');
+        return view('post.show', compact('post'));
     }
 
     /**
