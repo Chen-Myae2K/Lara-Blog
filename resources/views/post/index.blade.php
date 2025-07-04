@@ -34,7 +34,10 @@
                         <th>#</th>
                         <th>Title</th>
                         <th>Category</th>
-                        <th>Owner</th>
+                        @if (Auth::user()->role != 'author')
+                            <th>Owner</th>
+                        @endif
+
                         <th>Control</th>
                         <th>Created</th>
                     </tr>
@@ -46,11 +49,13 @@
                             <td class="w-25">
                                 {{ $post->title }}
                             </td>
-                            <td>{{ \App\Models\Category::find($post->category_id)->title }}</td>
-                            <td>{{ \App\Models\User::find($post->user_id)->name }}</td>
+                            <td>{{ $post->category->title }}</td>
+                            @notAuthor
+                                <td>{{ $post->user->name }}</td>
+                            @endnotAuthor
                             <td class=" ">
                                 {{-- post ပေါ် မူတည်ပြီး update လုပ်ခွင့်ရှိမရှိ စစ်ဆေးတာပါ --}}
-                                @can('update-post', $post)
+                                @can('update', $post)
                                     <a href="{{ route('post.edit', $post->id) }}" class="btn btn-sm btn-outline-dark">
                                         <i class="bi bi-pencil"></i>
                                     </a>
@@ -59,7 +64,7 @@
                                     <i class="bi bi-info-circle"></i>
                                 </a>
 
-                                @can('delete-post', $post)
+                                @can('delete', $post)
                                     <form action="{{ route('post.destroy', $post->id) }}" class="d-inline block"
                                         method="post">
                                         @csrf

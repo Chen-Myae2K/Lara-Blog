@@ -42,4 +42,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function isAuthor()
+    {
+        return $this->role === "author";
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

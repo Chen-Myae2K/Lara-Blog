@@ -57,6 +57,8 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
+                                    <br>
+                                    {{ Auth::user()->role }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -114,16 +116,18 @@
                                 </a>
                             </div>
 
-                            <p class="text-black text-small">Manage Users</p>
-                            <div class="list-group mb-3">
-                                <a class="list-group-item list-group-item-action" href="{{ route('user.index') }}">
-                                    User List
-                                </a>
+                            @admin
+                                <p class="text-black text-small">Manage Users</p>
+                                <div class="list-group mb-3">
+                                    <a class="list-group-item list-group-item-action" href="{{ route('user.index') }}">
+                                        User List
+                                    </a>
 
-                                <a class="list-group-item list-group-item-action" href="{{ route('user.create') }}">
-                                    Create User
-                                </a>
-                            </div>
+                                    <a class="list-group-item list-group-item-action" href="{{ route('user.create') }}">
+                                        Create User
+                                    </a>
+                                </div>
+                            @endadmin
 
                         </div>
                         <div class="col-lg-9">

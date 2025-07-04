@@ -22,7 +22,11 @@ class PostController extends Controller
             $keyword = request('keyword');
             $query->orWhere('title', 'LIKE', "%$keyword%")
                 ->orWhere('description', 'LIKE', "%$keyword%");
-        })->latest('id')->paginate(10)->withQueryString();
+        })
+            ->when(Auth::user()->role === 'author', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->latest('id')->paginate(10)->withQueryString();
         return view('post.index', compact('posts'));
     }
 
@@ -51,9 +55,6 @@ class PostController extends Controller
             $request->file('featured_image')->storeAs('public', $newName);
             $post->featured_image = $newName;
         }
-
-
-
         $post->save();
         return redirect()->route('post.index')->with('status', $post->title . ' created successfully!');
     }
@@ -63,6 +64,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        Gate::authorize('view', $post);
         return view('post.show', compact('post'));
     }
 
@@ -71,6 +73,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        Gate::authorize('update', $post);
         return view('post.edit', compact('post'));
     }
 
@@ -79,8 +82,7 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        if (Gate::denies('update', $post))
-        {
+        if (Gate::denies('update', $post)) {
             return abort(403, 'You are not authorized');
         }
 
@@ -107,8 +109,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if (Gate::denies('delete', $post))
-        {
+        if (Gate::denies('delete', $post)) {
             return abort(403, 'You are not authorized');
         }
 

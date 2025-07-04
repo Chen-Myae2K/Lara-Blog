@@ -20,10 +20,10 @@
                             @endisset
                         </div>
                         <div class="mb-3">
-                            <strong>Category:</strong> {{ \App\Models\Category::find($post->category_id)->title }}
+                            <strong>Category:</strong> {{ $post->category->title }}
                         </div>
                         <div class="mb-3">
-                            <strong>Author:</strong> {{ \App\Models\User::find($post->user_id)->name }}
+                            <strong>Author:</strong> {{ $post->user->name }}
                         </div>
                         <div class="mb-3">
                             <strong>Description:</strong>

@@ -16,7 +16,9 @@
                     <tr>
                         <th>#</th>
                         <th>Title</th>
-                        <th>Owner</th>
+                        @if (Auth::user()->role != 'author')
+                            <th>Owner</th>
+                        @endif
                         <th>Control</th>
                         <th>Created</th>
                     </tr>
@@ -30,15 +32,20 @@
                                 <br>
                                 <span class="badge bg-secondary"> {{ $category->slug }}</span>
                             </td>
-                            <td>
-                                {{ \App\Models\User::find($category->user_id)->name }}
-                            </td>
+                            @notAuthor
+                                <td>
+                                    {{ $category->user->name}}
+                                </td>
+                            @endnotAuthor
                             <td class=" ">
                                 @can('update', $category)
                                     <a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm btn-outline-dark">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                 @endcan
+                                <a href="{{ route('category.show', $category->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-info-circle"></i>
+                                </a>
                                 @can('delete', $category)
                                     <form action="{{ route('category.destroy', $category->id) }}" class="d-inline block"
                                         method="post">

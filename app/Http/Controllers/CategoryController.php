@@ -17,7 +17,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::latest('id')->get();
+        $categories = Category::latest('id')
+            ->when(Auth::user()->role === 'author', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->get();
         return view('category.index', compact('categories'));
     }
 
@@ -49,8 +53,10 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        // return view('category.show');
-        return abort(404);
+        return view('category.show', compact('category'));
+        // return abort(404);
+        // return $category->post->user;
+
     }
 
     /**
@@ -58,6 +64,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        Gate::authorize('update', $category);
         return view('category.edit', compact('category'));
     }
 

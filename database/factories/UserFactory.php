@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Nation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -28,6 +29,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'nation_id' => Nation::inRandomOrder()->first()->id,
             'remember_token' => Str::random(10),
         ];
     }

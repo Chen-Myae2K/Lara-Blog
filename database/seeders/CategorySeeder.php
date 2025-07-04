@@ -16,7 +16,7 @@ class CategorySeeder extends Seeder
     {
         $categories = ["IT News", "Sports", "Food & Drinks", "Travel", "Lifestyle"];
         foreach ($categories as $category) {
-            Category::create([
+            Category::factory()->create([
                 "title" => $category,
                 "slug" => Str::slug($category),
                 "user_id" => User::inRandomOrder()->first()->id
