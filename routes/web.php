@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NationController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -21,9 +22,9 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PageController::class,'index'])->name('page.index');
+Route::get('/detail/{slug}',[PageController::class,'detail'])->name('page.detail');
+
 
 Auth::routes();
 
@@ -41,3 +42,4 @@ Route::middleware('auth')->group(function () {
 Route::get('/file-test', function () {
     return Storage::allFiles('public');
 });
+

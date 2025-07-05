@@ -51,7 +51,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->slug = Str::slug($request->title);
         $post->description = $request->description;
-        $post->excerpt = Str::words($request->description, 20, ' ...');
+        $post->excerpt = Str::words($request->description, 40, ' ...');
         $post->user_id = Auth::id();
         $post->category_id = $request->category;
         if ($request->hasFile('featured_image')) {
@@ -107,7 +107,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->slug = Str::slug($request->title);
         $post->description = $request->description;
-        $post->excerpt = Str::words($request->description, 20, ' ...');
+        $post->excerpt = Str::words($request->description, 40, ' ...');
         $post->user_id = Auth::id();
         $post->category_id = $request->category;
 
