@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Photo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +27,10 @@ class PostController extends Controller
             ->when(Auth::user()->role === 'author', function ($query) {
                 $query->where('user_id', Auth::id());
             })
-            ->latest('id')->paginate(10)->withQueryString();
+            ->latest('id')
+            ->with('category', 'user')
+            ->paginate(10)
+            ->withQueryString();
         return view('post.index', compact('posts'));
     }
 
@@ -47,7 +51,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->slug = Str::slug($request->title);
         $post->description = $request->description;
-        $post->excerpt = Str::words($request->description, 50, ' ...');
+        $post->excerpt = Str::words($request->description, 20, ' ...');
         $post->user_id = Auth::id();
         $post->category_id = $request->category;
         if ($request->hasFile('featured_image')) {
@@ -56,6 +60,19 @@ class PostController extends Controller
             $post->featured_image = $newName;
         }
         $post->save();
+
+        foreach ($request->photos as $photo) {
+            //1. save to storage
+            $newName = uniqid() . "_post_photo." . $photo->getClientOriginalExtension();
+            $photo->storeAs('public', $newName);
+
+            //2. save to db
+            $photo = new Photo();
+            $photo->post_id = $post->id;
+            $photo->name = $newName;
+            $photo->save();
+        }
+
         return redirect()->route('post.index')->with('status', $post->title . ' created successfully!');
     }
 
@@ -82,6 +99,7 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
+
         if (Gate::denies('update', $post)) {
             return abort(403, 'You are not authorized');
         }
@@ -89,7 +107,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->slug = Str::slug($request->title);
         $post->description = $request->description;
-        $post->excerpt = Str::words($request->description, 50, ' ...');
+        $post->excerpt = Str::words($request->description, 20, ' ...');
         $post->user_id = Auth::id();
         $post->category_id = $request->category;
 
@@ -101,6 +119,17 @@ class PostController extends Controller
         }
 
         $post->update();
+        if ($request->photos) {
+            foreach ($request->photos as $photo) {
+                $newName = uniqid() . "_post_photo." . $photo->getClientOriginalExtension();
+                $photo->storeAs('public', $newName);
+
+                $photo = new Photo();
+                $photo->name = $newName;
+                $photo->post_id = $post->id;
+                $photo->save();
+            }
+        }
         return redirect()->route('post.index')->with('status', $post->title . ' updated successfully!');
     }
 
@@ -115,6 +144,11 @@ class PostController extends Controller
 
         if ($post->featured_image) {
             Storage::delete('public/' . $post->featured_image); // Delete the image from storage
+        }
+
+        foreach ($post->photos as $photo) {
+            Storage::delete('public/' . $photo->name);
+            $photo->delete();
         }
         $post->delete();
         return redirect()->route('post.index')->with('status', $post->title . ' deleted successfully!');

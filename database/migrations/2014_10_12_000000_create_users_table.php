@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             // $table->enum('role',['admin','editor','author'])->default('author');    //author က  deafault role
             $table->string('password');
-            $table->foreignId("nation_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("nation_id")->default(1)->constrained()->cascadeOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });

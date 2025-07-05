@@ -21,6 +21,7 @@ class CategoryController extends Controller
             ->when(Auth::user()->role === 'author', function ($query) {
                 $query->where('user_id', Auth::id());
             })
+            ->with('user')
             ->get();
         return view('category.index', compact('categories'));
     }

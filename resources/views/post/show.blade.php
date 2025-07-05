@@ -15,7 +15,7 @@
                         <hr>
                         <div class="mb-3">
                             @isset($post->featured_image)
-                                <img src="{{ asset('storage/' . $post->featured_image) }}" class="img-fluid"
+                                <img src="{{ asset('storage/' . $post->featured_image) }}" width="200" class="img-fluid"
                                     alt="Featured Image">
                             @endisset
                         </div>
@@ -28,6 +28,14 @@
                         <div class="mb-3">
                             <strong>Description:</strong>
                             <p>{{ $post->description }}</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <strong class="mb-3">Photos:</strong>
+                            <br>
+                            @foreach ($post->photos as $photo)
+                                <img src="{{ asset('storage/' . $photo->name) }}" height="100" alt="">
+                            @endforeach
                         </div>
 
                         <div class="mb-3">

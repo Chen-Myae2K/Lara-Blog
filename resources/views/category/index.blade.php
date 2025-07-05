@@ -16,6 +16,7 @@
                     <tr>
                         <th>#</th>
                         <th>Title</th>
+                        <th>Count</th>
                         @if (Auth::user()->role != 'author')
                             <th>Owner</th>
                         @endif
@@ -31,6 +32,9 @@
                                 {{ $category->title }}
                                 <br>
                                 <span class="badge bg-secondary"> {{ $category->slug }}</span>
+                            </td>
+                            <td>
+                                {{$category->posts()->count()}}
                             </td>
                             @notAuthor
                                 <td>

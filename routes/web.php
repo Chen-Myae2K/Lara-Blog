@@ -3,10 +3,12 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NationController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/post', PostController::class);
     Route::resource('/user', UserController::class);
     Route::resource('/nation', NationController::class);
+    Route::resource('/photo', PhotoController::class);
+});
+
+Route::get('/file-test', function () {
+    return Storage::allFiles('public');
 });
