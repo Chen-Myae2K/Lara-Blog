@@ -4,12 +4,49 @@
         <div class="row justify-content-center">
             <div class="col-12 col-lg-6">
                 <h1 class="text-center">Blog Post</h1>
+                <div class="">
+                    @isset($category)
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p>Filter By : {{ $category->title }}</p>
+                            <a href="{{ route('page.index', $category->slug) }}') }}" class="btn  btn-outline-primary">See
+                                All</a>
+                        </div>
+                    @endisset
+                </div>
+                <div class="d-flex justify-content-between items-center my-4">
+                    <div class="d-flex gap-3 items-center">
+                        @empty($category)
+                            @if (request('keyword'))
+                                <p>Search by : {{ request('keyword') }}</p>
+                                <a href="{{ route('page.index') }}">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            @endif
+                        @endempty
+                    </div>
+                    <div>
+                        @empty($category)
+                            <form action="{{ route('page.index') }}" method="get" class="d-flex">
+                                <input type="text" name="keyword" class="form-control me-2 "
+                                    value="{{ request('keyword') }}">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </form>
+                        @endempty
+                        @isset($category)
+                            <form action="{{ route('page.category', $category->slug) }}" method="get" class="d-flex">
+                                <input type="text" name="keyword" class="form-control me-2 "
+                                    value="{{ request('keyword') }}">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </form>
+                        @endisset
+                    </div>
+                </div>
                 @forelse($posts as $post)
                     <div class="card mb-3">
                         <div class="card-body">
                             <h3>{{ $post->title }}</h3>
                             <div>
-                                <a href="">
+                                <a href="{{ route('page.category', $post->category->slug) }}">
                                     <span class="badge bg-secondary"> {{ $post->category->title }}</span>
                                 </a>
                             </div>

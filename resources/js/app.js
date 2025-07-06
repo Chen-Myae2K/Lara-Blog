@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import "./bootstrap";
-
+import VenoBox from "venobox";
 
 window.showToast = function (message) {
     const Toast = Swal.mixin({
@@ -19,3 +19,7 @@ window.showToast = function (message) {
         title: message,
     });
 };
+
+new VenoBox({
+    selector: ".venobox",
+});

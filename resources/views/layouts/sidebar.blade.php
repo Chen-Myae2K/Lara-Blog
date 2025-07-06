@@ -2,7 +2,7 @@
     <div class="row g-3">
         <div class="col-lg-3">
             <div class="list-group mb-3 ">
-                <a class="list-group-item list-group-item-action" href="{{ route('home') }}">
+                <a class="list-group-item list-group-item-action" href="{{ route('page.index') }}">
                     Home
                 </a>
 
