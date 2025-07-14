@@ -41,6 +41,12 @@
                         @endisset
                     </div>
                 </div>
+                <div class="list-group mb-5">
+                    @foreach ($categories as $category)
+                        <a href="{{ route('page.category', $category->slug) }}"
+                            class="list-group-item">{{ $category->title }}</a>
+                    @endforeach
+                </div>
                 @forelse($posts as $post)
                     <div class="card mb-3">
                         <div class="card-body">
