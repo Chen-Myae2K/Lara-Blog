@@ -4,6 +4,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-lg-6">
                 <h1 class="text-center">Blog Post</h1>
+               
                 <div class="">
                     @isset($category)
                         <div class="d-flex justify-content-between align-items-center mb-3">

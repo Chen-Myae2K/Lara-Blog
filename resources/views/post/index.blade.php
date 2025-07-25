@@ -8,11 +8,9 @@
         </ol>
     </nav>
     <div class="card">
-        <div class="card-body">
-            <h4>Post List</h4>
-            <hr>
+        <x-card>
+            <x-slot:title>Post List</x-slot:title>
             <div class="d-flex justify-content-between items-center mb-3">
-
                 <div class="d-flex gap-3 items-center">
                     @if (request('keyword'))
                         <p>Search by : {{ request('keyword') }}</p>
@@ -93,6 +91,7 @@
             <div class="">
                 {{ $posts->onEachSide(1)->links() }}
             </div>
-        </div>
+        </x-card>
+
     </div>
 @endsection

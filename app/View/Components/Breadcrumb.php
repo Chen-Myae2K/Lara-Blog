@@ -6,18 +6,17 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Alert extends Component
+class Breadcrumb extends Component
 {
-    public $text;
-    public $color;
     /**
      * Create a new component instance.
      */
-    public function __construct($text, $color)
-    {
-        $this->text = $text;
-        $this->color = $color;
 
+    public $links;
+    public function __construct($links = [])
+    {
+
+        $this->links = ["home" => route('home')] + $links;
     }
 
     /**
@@ -25,6 +24,6 @@ class Alert extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.alert');
+        return view('components.breadcrumb');
     }
 }
