@@ -63,21 +63,34 @@
                                 </a>
 
                                 @can('delete', $post)
-                                    <form action="{{ route('post.destroy', $post->id) }}" class="d-inline block"
-                                        method="post">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i
-                                                class="bi bi-trash"></i></button>
-                                    </form>
+                                    @trash
+                                        <form action="{{ route('post.destroy', [$post->id, 'delete' => 'force']) }}"
+                                            class="d-inline block" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i
+                                                    class="bi bi-trash"></i></button>
+                                        </form>
+                                        <form action="{{ route('post.destroy', [$post->id, 'delete' => 'restore']) }}"
+                                            class="d-inline block" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-sm btn-outline-success"><i
+                                                    class="bi bi-recycle"></i></button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('post.destroy', [$post->id, 'delete' => 'soft']) }}"
+                                            class="d-inline block" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i
+                                                    class="bi bi-trash"></i></button>
+                                        </form>
+                                    @endtrash
                                 @endcan
                             </td>
                             <td>
-
-                                <p class="small mb-0 text-black-50"> <i class="bi bi-calendar me-1"></i>
-                                    {{ $post->created_at->format('d M Y') }}</p>
-                                <p class="small mb-0 text-black-50"> <i class="bi bi-clock me-1"></i>
-                                    {{ $post->created_at->format('h:i A') }}</p>
+                                {!! $post->time !!}
                             </td>
                         </tr>
 

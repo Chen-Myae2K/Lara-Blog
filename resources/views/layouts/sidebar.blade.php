@@ -23,6 +23,10 @@
                 <a class="list-group-item list-group-item-action" href="{{ route('post.create') }}">
                     Create Post
                 </a>
+
+                <a class="list-group-item list-group-item-action" href="{{ route('post.index', ['trash' => true]) }}">
+                    Deleted Post
+                </a>
             </div>
 
             <p class="text-black text-small">Manage Categories</p>
