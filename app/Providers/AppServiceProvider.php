@@ -29,8 +29,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
-        DB::listen(function ($query) {
-            logger($query->sql);
+        DB::listen(function($q){
+            return logger($q->sql);
         });
 
         // View::share('categories', Category::latest('id')->get());

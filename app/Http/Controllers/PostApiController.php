@@ -11,12 +11,7 @@ class PostApiController extends Controller
     public function index()
     {
 
-        $posts = Post::when(request('keyword'), function ($q) {
-            $keyword = request('keyword');
-            $q->orWhere('title', 'like', "%$keyword%")
-                ->orWhere('description', 'like', "%$keyword%");
-        })
-            ->with('category', 'user')
+        $posts = Post::search()
             ->paginate(10)
             ->withQueryString();
         // return response($posts);

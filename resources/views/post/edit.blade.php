@@ -8,8 +8,10 @@
         <form action="{{ route('post.update', $post->id) }}" id="postUpdateForm" method="post" enctype="multipart/form-data">
             @csrf
             @method('put')
+            <x-input name="title" type="text" label="Post Title" default="{{ $post->title }} "></x-input>
         </form>
-        <x-input name="title" type="text" label="Post Title" default="{{ $post->title }} "></x-input>
+
+
 
         <div class="mb-3">
             <label for="category" class="form-label">Select Category</label>

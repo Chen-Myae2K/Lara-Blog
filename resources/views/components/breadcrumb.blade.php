@@ -9,8 +9,5 @@
                           href="{{ $url }}">{{ $name }}</a></li>
               @endif
           @endforeach
-
-
-
       </ol>
   </nav>

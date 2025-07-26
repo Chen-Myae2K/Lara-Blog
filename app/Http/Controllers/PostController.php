@@ -18,20 +18,16 @@ class PostController extends Controller
      */
     public function index()
     {
-
-        $posts = Post::when(request('keyword'), function ($query) {
-            $keyword = request('keyword');
-            $query->orWhere('title', 'LIKE', "%$keyword%")
-                ->orWhere('description', 'LIKE', "%$keyword%");
-        })
+        $posts = Post::search()
             ->when(Auth::user()->role === 'author', function ($query) {
                 $query->where('user_id', Auth::id());
             })
             ->latest('id')
-            ->with('category', 'user')
             ->paginate(10)
             ->withQueryString();
+
         return view('post.index', compact('posts'));
+        // return response()->json($posts);
     }
 
     /**
@@ -62,17 +58,24 @@ class PostController extends Controller
         }
         $post->save();
 
-        foreach ($request->photos as $photo) {
+        foreach ($request->photos as $key => $photo) {
+
             //1. save to storage
             $newName = uniqid() . "_post_photo." . $photo->getClientOriginalExtension();
             $photo->storeAs('public', $newName);
+            $savedPhotos[$key] = [
+                "post_id" => $post->id,
+                "name" => $newName,
+            ];
+        };
 
-            //2. save to db
-            $photo = new Photo();
-            $photo->post_id = $post->id;
-            $photo->name = $newName;
-            $photo->save();
-        }
+        Photo::insert($savedPhotos);
+
+        //2. save to db
+        // $photo = new Photo();
+        // $photo->post_id = $post->id;
+        // $photo->name = $newName;
+        // $photo->save();
 
         return redirect()->route('post.index')->with('status', $post->title . ' created successfully!');
     }
@@ -83,6 +86,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         Gate::authorize('view', $post);
+        dd($post);
         return view('post.show', compact('post'));
     }
 
@@ -93,7 +97,7 @@ class PostController extends Controller
     {
         $links = ["post" => route('post.index'), "edit" => route('post.edit', $post)];
         Gate::authorize('update', $post);
-        return view('post.edit', compact('post','links'));
+        return view('post.edit', compact('post', 'links'));
     }
 
     /**
@@ -144,14 +148,24 @@ class PostController extends Controller
             return abort(403, 'You are not authorized');
         }
 
+        // dd($post->photos->pluck('id'));
+
         if ($post->featured_image) {
             Storage::delete('public/' . $post->featured_image); // Delete the image from storage
         }
 
-        foreach ($post->photos as $photo) {
-            Storage::delete('public/' . $photo->name);
-            $photo->delete();
-        }
+        // foreach ($post->photos as $photo) {
+        //     //remove from storage
+        //     Storage::delete('public/' . $photo->name);
+        //     //delete from table
+        //     // $photo->delete();
+        // }
+
+        Storage::delete($post->photos->map(fn($photo) => "public/" . $photo->name)->toArray());
+
+
+        // Photo::destroy($post->photos->pluck('id')); //ဒါကကျ collection ထည့်‌ေပးလိုက်လည်းရ
+        Photo::where('post_id', $post->id)->delete();
         $post->delete();
         return redirect()->route('post.index')->with('status', $post->title . ' deleted successfully!');
     }
